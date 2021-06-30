@@ -1,0 +1,40 @@
+<html>
+	<head>
+		<title>Randomar</title>
+	</head>
+	<body style="margin: 0px; padding: 0px;">
+		<canvas id="canvas" width="720" height="400" style="width: 100%; height: 100%; background-color: black;"></canvas>
+		<script src="./pyodide/pyodide.js"></script>
+		<script src="./pyjs.js"></script>
+		<script>
+			window.addEventListener('contextmenu', function(e){
+				e.preventDefault();
+			});
+
+			var type = location.href.indexOf('=') == -1 ? 0 : parseInt(location.href.split('?')[1].split('=')[1]) || 0;
+			var rom_content;
+			
+			function load_rom(callback){
+				var xmlHttp = new XMLHttpRequest();
+				xmlHttp.responseType = 'arraybuffer';
+				xmlHttp.onreadystatechange = function() { 
+					if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+						callback(xmlHttp.response);
+				}
+				xmlHttp.open("GET", 'lol.nes', true); 
+				xmlHttp.send(null);
+			}
+			
+			async function main(){
+				await init_python();
+				load_rom(async function(rom_bytes){
+					console.log(rom_bytes);
+					rom_content = new Uint8Array(rom_bytes);
+					console.log(rom_content);
+					await py_exec_script_async('main.py');
+				});
+			}
+			main();
+		</script>
+	</body>
+</html>
