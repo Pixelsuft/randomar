@@ -291,7 +291,10 @@
 		}
 	  
 	  function loader() {
-		const url = get_query_arguments()['url'];
+		const args = get_query_arguments();
+		const url = args['url'];
+		const title = args['title'];
+		document.title=title;
         var request = new XMLHttpRequest();
 
         request.onload = function() {
