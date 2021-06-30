@@ -293,8 +293,9 @@
 	  function loader() {
 		const args = get_query_arguments();
 		const url = args['url'];
-		const title = args['title'];
+		const title = args['title'].trim();
 		document.title=title;
+		putMessage('\n\n' + title);
         var request = new XMLHttpRequest();
 
         request.onload = function() {
